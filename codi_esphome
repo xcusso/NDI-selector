@@ -1,0 +1,118 @@
+esphome:
+  name: spark-selector
+  platform: ESP32
+  board: esp-wrover-kit
+
+ethernet:
+  type: LAN8720
+  mdc_pin: GPIO23
+  mdio_pin: GPIO18
+  clk_mode: GPIO0_IN
+  phy_addr: 1
+  power_pin: GPIO16
+
+  # Optional manual IP
+  manual_ip:
+    static_ip: 192.168.130.124
+    gateway: 192.168.130.1
+    subnet: 255.255.255.0
+
+# Enable logging
+logger:
+  #level: DEBUG
+
+http_request:
+  useragent: esphome/device
+  timeout: 5s
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO2
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_on: 10ms
+    name: "Camera 1"
+    id: "C1"
+    on_press:
+      then:
+        - http_request.get:
+            url:  https://192.168.130.123//api/v1/decoder/current/set?id=1
+            verify_ssl: false
+            on_response:
+              then:
+                - logger.log:
+                    format: "Response status: %d"
+                    args:
+                      - status_code        
+
+  - platform: gpio
+    pin:
+      number: GPIO4
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_on: 10ms        
+    name: "Camera 2"
+    id: "C2"
+    on_press:
+      then:
+        - http_request.get:
+            url:  https://192.168.130.123//api/v1/decoder/current/set?id=2
+            verify_ssl: false
+            on_response:
+              then:
+                - logger.log:
+                    format: "Response status: %d"
+                    args:
+                      - status_code  
+  - platform: gpio
+    pin:
+      number: GPIO14
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_on: 10ms        
+    name: "Camera 3"
+    id: "C3"
+    on_press:
+      then:
+        - http_request.get:
+            url:  https://192.168.130.123//api/v1/decoder/current/set?id=3
+            verify_ssl: false
+            on_response:
+              then:
+                - logger.log:
+                    format: "Response status: %d"
+                    args:
+                      - status_code  
+  - platform: gpio
+    pin:
+      number: GPIO15
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_on: 10ms        
+    name: "Camera 4"
+    id: "C4"
+    on_press:
+      then:
+        - http_request.get:
+            url:  https://192.168.130.123//api/v1/decoder/current/set?id=4
+            verify_ssl: false
+            on_response:
+              then:
+                - logger.log:
+                    format: "Response status: %d"
+                    args:
+                      - status_code  
+ 
