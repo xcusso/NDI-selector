@@ -1,5 +1,5 @@
 esphome:
-  name: spark-selector
+  name: ndi-selector
   platform: ESP32
   board: esp-wrover-kit
 
